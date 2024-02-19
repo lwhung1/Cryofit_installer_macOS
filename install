@@ -1,0 +1,45 @@
+#!/bin/sh
+#mdpath=$(which mdrun)
+if [ ${#PHENIX} -gt 0 ]
+then
+  export cryofitpath=$PHENIX/modules/cryo_fit
+  export gmxroot=$cryofitpath/gromacs
+else
+  echo 'This installer will install Cryo_fit in your Phenix suite. '
+  echo 'No Phenix is found.'
+  echo 'Please install or setup Phenix first.'
+  exit 1
+fi
+
+#unalias cp
+echo "Found Phenix suite in $PHENIX"
+echo "The installer will install Cryo_Fit in $PHENIX/modules/cryo_fit."
+echo "Make sure you have "write" privilage there."
+echo 'If you are on the sudoers list, try "sudo -E ./install" in case of directory access issues.'
+
+echo "Any existing Cryo_fit in this location will be removed."
+
+[ -d $cryofitpath ] && rm -rf $cryofitpath
+cp -pr ./cryo_fit $PHENIX/modules/
+sed "s+GMXROOT+$gmxroot+g" $gmxroot/bin/gmxrc.dat > $gmxroot/bin/gmxrc
+echo "Copying  GUI files..."
+cp ./GUI/CryoFit.py $PHENIX/modules/phenix/wxGUI2/Programs/
+
+echo 'Integrating Cryo_Fit with Phenix...'
+libtbx.configure cryo_fit
+
+echo
+echo
+echo 'Cryo_fit has been integrated with your Phenix environment'
+echo 'You can begin using Cryo_fit in PHENIX now by setting your environment with the 'source' command:'
+echo
+echo "source $gmxroot/bin/gmxrc"
+echo
+echo "You may want to put the source statement in your shell startup files e.g. .cshrc, .bashrc ...etc."
+echo
+echo "or you may specify the location of Gromacs executables ( $gmxroot/bin ) when you run Cryofit."
+echo
+echo
+
+
+

@@ -1,0 +1,42 @@
+# This is a convenience script to determine which
+# type of shell you have, and then run GMXRC.[csh|bash|zsh]
+# from the Gromacs binary directory.
+#
+# If you only use one shell you can copy that GMXRC.* instead.
+
+# only csh/tcsh understand 'set'
+set is_csh = 123
+test "$is_csh" = 123 && goto CSH
+
+# if we got here, shell is bsh/bash/zsh/ksh
+
+GMXBIN=GMXROOT/bin
+PATH=${GMXBIN}${PATH:+:}${PATH}
+export PATH
+return
+
+
+# csh/tcsh jump here
+
+CSH:
+setenv GMXBIN GMXROOT/bin
+setenv PATH ${GMXBIN}:${PATH}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
